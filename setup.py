@@ -1,4 +1,4 @@
-"""
+u"""
 PyLaTeX
 -------
 
@@ -150,14 +150,14 @@ Copyright 2014 Jelte Fennema, under `the MIT license
 
 """
 from distutils.core import setup
-setup(name='PyLaTeX',
-      version='0.4.2',
-      author='Jelte Fennema',
-      author_email='pylatex@jeltef.nl',
-      description='A Python library for creating LaTeX files',
+setup(name=u'PyLaTeX',
+      version=u'0.4.2',
+      author=u'Jelte Fennema',
+      author_email=u'pylatex@jeltef.nl',
+      description=u'A Python library for creating LaTeX files',
       long_description=__doc__,
-      packages=['pylatex'],
-      url='https://github.com/JelteF/PyLaTeX',
-      license='MIT',
-      install_requires=['ordered-set'],
-      )
+      packages=[u'pylatex'],
+      url=u'https://github.com/JelteF/PyLaTeX',
+      license=u'MIT',
+      install_requires=[u'ordered-set', u'numpy'],
+)

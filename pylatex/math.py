@@ -5,13 +5,13 @@ from .base_classes import BaseLaTeXContainer
 class Math(BaseLaTeXContainer):
     def __init__(self, data=None, inline=False):
         self.inline = inline
-        super().__init__(data)
+        super(Math, self).__init__(data)
 
     def dumps(self):
         if self.inline:
-            string = '$' + dumps_list(self, token=' ') + '$'
+            string = u'$' + dumps_list(self, token=u' ') + u'$'
         else:
-            string = '$$' + dumps_list(self, token=' ') + '$$\n'
+            string = u'$$' + dumps_list(self, token=u' ') + u'$$\n'
 
-        super().dumps()
+        super(Math, self).dumps()
         return string
