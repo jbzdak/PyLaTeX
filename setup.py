@@ -159,5 +159,5 @@ setup(name=u'PyLaTeX',
       packages=[u'pylatex'],
       url=u'https://github.com/JelteF/PyLaTeX',
       license=u'MIT',
-      install_requires=[u'ordered-set', u'numpy'],
+      install_requires=[u'ordered-set', u'numpy', u'enum34', u'jinja2', u'six'],
 )

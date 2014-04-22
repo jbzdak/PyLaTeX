@@ -10,9 +10,12 @@ u"""
     :license: MIT, see License for more details.
 """
 
-from py2compat.userlist import UserList
 from ordered_set import OrderedSet
 from pylatex.utils import dumps_list
+
+from six import StringIO
+
+from jinja2 import Template, Environment
 
 
 class BaseLaTeXClass(object):
@@ -42,7 +45,28 @@ class BaseLaTeXClass(object):
         file_.write(self.dumps_packages())
 
 
-class BaseLaTeXContainer(BaseLaTeXClass, UserList):
+class TemplatedLatexMixin(object):
+
+    TEMPLATE = None
+
+    ENV = Environment(
+        '%{%', '%}%',
+        '%{{'
+    )
+
+    def dumps(self):
+        u"""Represents the class as a string in LaTeX syntax."""
+        file = StringIO.StringIO()
+        self.dump(file)
+
+    def dump(self, file_):
+        u"""Writes the LaTeX representation of the class to a file."""
+
+        template = Template(self.TEMPLATE)
+        for token in template.generate(s=self):
+            file_.write(token)
+
+class BaseLaTeXContainer(BaseLaTeXClass):
 
     u"""A base class that can cointain other LaTeX content."""
 
@@ -53,6 +77,15 @@ class BaseLaTeXContainer(BaseLaTeXClass, UserList):
         self.data = data
 
         super(BaseLaTeXContainer, self).__init__(packages=packages)
+
+    def append(self, item):
+        self.data.append(item)
+
+    def __iter__(self):
+        """
+        Iterates over appened items
+        """
+        return iter(self.data)
 
     def dumps(self):
         u"""Represents the container as a string in LaTeX syntax."""
@@ -95,3 +128,9 @@ class BaseLaTeXNamedContainer(BaseLaTeXContainer):
         super(BaseLaTeXNamedContainer, self).dumps()
 
         return string
+
+class BaseTemplatedLaTeXNamedContainer(TemplatedLatexMixin, BaseLaTeXNamedContainer):
+
+    TEMPLATE = u"""
+    \
+    """.strip()
