@@ -48,6 +48,14 @@ class BaseLaTeXClass(object):
         """Writes the LaTeX representation of the packages to a file."""
         file_.write(self.dumps_packages())
 
+    def __str__(self):
+        return self.dumps()
+
+    if six.PY2:
+
+        def __unicode__(self):
+            return self.dumps()
+
 
 class Token(BaseLaTeXClass):
     def __init__(self, token):
@@ -87,7 +95,6 @@ class TemplatedLatexMixin(object):
          '%%%', '%%%',
         trim_blocks=True,
         lstrip_blocks=True,
-
         loader=PackageLoader('pylatex')
     )
 
@@ -153,6 +160,10 @@ class BaseLaTeXContainer(BaseLaTeXClass):
 
 class Options(BaseLaTeXContainer, UserList):
     """
+
+    Class implementing generic latex options, it supports normal positional
+    options, as well as key-value pairs.
+
     >>> print(Options().dumps())
     <BLANKLINE>
     >>> print(Options('a', 'b', 'c').dumps())
@@ -193,8 +204,6 @@ class Options(BaseLaTeXContainer, UserList):
         else:
             return u"[{}]".format(u",".join(items))
 
-
-
 class BaseLaTeXNamedContainer(BaseLaTeXContainer):
 
     """A base class for containers with one of a basic begin end syntax"""
@@ -216,7 +225,7 @@ class BaseLaTeXNamedContainer(BaseLaTeXContainer):
 
         string += r'\end{' + self.name + '}\n'
 
-        super().dumps()
+        super(BaseLaTeXNamedContainer, self).dumps()
 
         return string
 
@@ -224,8 +233,8 @@ class BaseTemplatedLaTeXNamedContainer(TemplatedLatexMixin, BaseLaTeXNamedContai
     """
     >>> named_containser = BaseTemplatedLaTeXNamedContainer("test", options=["a", "b"])
     >>> print(named_containser.dumps()) #doctest: +NORMALIZE_WHITESPACE
-    \\begin{ test }[a,b]
-    \\end{ test }
+    \\begin{test}[a,b]
+    \\end{test}
     """
     TEMPLATE_NAME = "enviorment.tex"
 

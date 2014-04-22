@@ -53,7 +53,7 @@ class Subfloat(TemplatedLatexClass):
     >>> g = Graphics("foo.png", width=Dimension(10, "pt"))
     >>> s = Subfloat("Caption", g)
     >>> print(s.dumps())
-    \\subfloat[s.caption]{ \\includegraphics[width=10\\pt]{foo.png} }
+    \\subfloat[Caption]{ \\includegraphics[width=10\\pt]{foo.png} }
 
     """
 
@@ -88,17 +88,15 @@ class Figure(Float):
     """
     >>> f = Figure(placement='h')
     >>> print(f.dumps()) #doctest: +NORMALIZE_WHITESPACE
-    \\begin{ figure }[h]
-    <BLANKLINE>
-    \\end{ figure }
+    \\begin{figure}[h]
+    \\end{figure}
     >>> f = Figure(placement='h', label="Foo", caption="The Foo figure")
-    >>> print(f.dumps()) #doctest: +NORMALIZE_WHITESPACE
-    \\begin{ figure }[h]
-    <BLANKLINE>
-    \\caption{ The Foo figure \\label{ Foo }}
-    \\end{ figure }
-
+    >>> print(f.dumps()) # doctest: +NORMALIZE_WHITESPACE
+    \\begin{figure}[h]
+    \\caption{The Foo figure\\label{Foo}}
+    \\end{figure}
     """
+
     FLOAT_NAME = "figure"
 
     def add_subfig(self, subfig):
