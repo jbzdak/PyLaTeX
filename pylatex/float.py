@@ -5,13 +5,14 @@ import re
 
 FLOAT_PLACEMENT = r'[Hhtpb]\!?'
 
+
 class Float(BaseTemplatedLaTeXNamedContainer):
     """
 
     """
     FLOAT_NAME = None
     TEMPLATE_NAME = "float.tex"
-    def __init__(self, name=None, placement=None, data=None, packages=None, label=None, caption=None):
+    def __init__(self, name=None, placement='h', data=None, packages=None, label=None, caption=None):
         if name is None:
             name = self.FLOAT_NAME
         super(Float, self).__init__(name, data, packages)
@@ -21,6 +22,7 @@ class Float(BaseTemplatedLaTeXNamedContainer):
         self.label = label
         self.caption = caption
 
+
 class Graphics(BaseLaTeXClass):
     """
     >>> print(Graphics("foo.png").dumps())
@@ -29,7 +31,7 @@ class Graphics(BaseLaTeXClass):
     \\includegraphics[width=0.5\\textwidth]{foo.png}
     """
     def __init__(self, file, width=None, height=None):
-        super(Graphics, self).__init__()
+        super(Graphics, self).__init__(['\usepackage{graphicx}'])
         self.file = file
         self.width = width
         self.height = height
@@ -42,6 +44,39 @@ class Graphics(BaseLaTeXClass):
             options.height = self.height
 
         return "\includegraphics{opts}{{{file}}}".format(opts=options.dumps(), file=self.file)
+
+
+class Subfloat(TemplatedLatexClass):
+
+    """
+
+    >>> g = Graphics("foo.png", width=Dimension(10, "pt"))
+    >>> s = Subfloat("Caption", g)
+    >>> print(s.dumps())
+    \\subfloat[s.caption]{ \\includegraphics[width=10\\pt]{foo.png} }
+
+    """
+
+    TEMPLATE_NAME = "subfloat.tex"
+
+    def __init__(self, caption, graphics):
+        super(Subfloat, self).__init__(['\usepackage{subfig}', '\usepackage{graphicx}'])
+        self.caption = caption
+        self.graphics = graphics
+
+
+    def propegate_packages(self):
+        u"""Makes sure packages get propegated."""
+        for item in self.data:
+            if isinstance(item, BaseLaTeXContainer):
+                item.propegate_packages()
+            if isinstance(item, BaseLaTeXClass):
+                for p in item.packages:
+                    self.packages.add(p)
+
+class QQuad(BaseLaTeXClass):
+    def dumps(self):
+        return r"\qquad"
 
 
 class Figure(Float):
@@ -61,3 +96,12 @@ class Figure(Float):
 
     """
     FLOAT_NAME = "figure"
+
+    def add_subfig(self, subfig):
+        [self.packages.append(p) for p in subfig.packages]
+        self.append(subfig)
+
+    def new_subfig_row(self):
+        self.append(QQuad())
+
+

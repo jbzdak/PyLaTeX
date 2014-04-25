@@ -50,7 +50,6 @@ class BaseLaTeXClass(object):
         return self.dumps()
 
 
-
 class Dimension(BaseLaTeXClass):
     __DIMENSION_UNITS = [
         'pt', 'mm', 'cm', 'in', 'ex', 'em', "baselineskip", "baselineskip",
@@ -75,9 +74,9 @@ class TemplatedLatexMixin(object):
     TEMPLATE_NAME = None
 
     ENV = Environment(
-        # '%{%', '%}%',
-        # '%{{', '}}%',
-        # '%%%', '%%%',
+         '<%', '%>',
+         '<<', '>>',
+         '%%%', '%%%',
         trim_blocks=True,
         lstrip_blocks=True,
 
@@ -100,6 +99,9 @@ class TemplatedLatexMixin(object):
         for token in template.generate(s=self):
             file_.write(token)
 
+
+class TemplatedLatexClass(TemplatedLatexMixin, BaseLaTeXClass):
+    pass
 
 
 class BaseLaTeXContainer(BaseLaTeXClass):
@@ -130,6 +132,8 @@ class BaseLaTeXContainer(BaseLaTeXClass):
     def propegate_packages(self):
         u"""Makes sure packages get propegated."""
         for item in self.data:
+            if isinstance(item, BaseLaTeXContainer):
+                item.propegate_packages()
             if isinstance(item, BaseLaTeXClass):
                 for p in item.packages:
                     self.packages.add(p)
