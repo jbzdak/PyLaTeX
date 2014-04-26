@@ -182,6 +182,8 @@ class Options(BaseLaTeXContainer, UserList):
             return Options(*object)
         if isinstance(object, Options):
             return object
+        if isinstance(object, six.string_types):
+            return Token(object)
 
     def __init__(self, *args, **kwargs):
         super(BaseLaTeXContainer, self).__init__()
@@ -218,8 +220,7 @@ class BaseLaTeXNamedContainer(BaseLaTeXContainer):
         """Represents the named container as a string in LaTeX syntax."""
         string = r'\begin{' + self.name + '}\n'
 
-        if self.options is not None:
-            string += '[' + self.options + ']'
+        string += self.options.dumps()
 
         string += dumps_list(self)
 

@@ -4,10 +4,10 @@ import numpy as np
 
 from pylatex import Document, Section, Subsection, Table, Math, TikZ, Axis, \
     Plot
-from pylatex.py2compat.numpy_compat import Matrix
+from pylatex.numpy import Matrix
 from pylatex.utils import italic
 
-doc = Document()
+doc = Document(filename="example")
 section = Section(u'Yaay the first section, it can even be ' + italic(u'italic'))
 
 section.append(u'Some regular text')

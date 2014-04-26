@@ -8,9 +8,10 @@ u"""
     :copyright: (c) 2014 by Jelte Fennema.
     :license: MIT, see License for more details.
 """
+import six
 
-
-from pylatex.base_classes import BaseLaTeXClass, BaseLaTeXNamedContainer
+from pylatex.base_classes import BaseLaTeXClass, BaseLaTeXNamedContainer, \
+    Options
 from pylatex.package import Package
 
 
@@ -42,7 +43,7 @@ class Plot(BaseLaTeXClass):
         self.name = name
         self.func = func
         self.coordinates = coordinates
-        self.options = options
+        self.options = Options.create(options)
 
         packages = [Package(u'pgfplots'), Package(u'compat=newest',
                                                  base=u'pgfplotsset')]
@@ -51,23 +52,24 @@ class Plot(BaseLaTeXClass):
 
     def dumps(self):
         u"""Represents the plot as a string in LaTeX syntax."""
-        string = ur'\addplot'
+        string = six.text_type()
 
-        if self.options is not None:
-            string += u'[' + self.options + u']'
+        string+= r'\addplot'
+
+        string += self.options.dumps()
 
         if self.coordinates is not None:
             string += u' coordinates {\n'
 
             for c in self.coordinates:
-                string += u'(' + unicode(c[0]) + u',' + unicode(c[1]) + u')\n'
+                string += u'(' + six.text_type(c[0]) + u',' + six.text_type(c[1]) + u')\n'
             string += u'};\n\n'
 
         elif self.func is not None:
             string += u'{' + self.func + u'};\n\n'
 
         if self.name is not None:
-            string += ur'\addlegendentry{' + self.name + u'}\n'
+            string += r'\addlegendentry{' + self.name + u'}\n'
 
         super(Plot, self).dumps()
 
