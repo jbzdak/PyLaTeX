@@ -49,6 +49,14 @@ class BaseLaTeXClass(object):
     def __unicode__(self):
         return self.dumps()
 
+class Token(BaseLaTeXClass):
+    def __init__(self, token):
+        super(Token, self).__init__()
+        self.token = token
+
+    def dumps(self):
+        return self.token
+
 
 class Dimension(BaseLaTeXClass):
     __DIMENSION_UNITS = [

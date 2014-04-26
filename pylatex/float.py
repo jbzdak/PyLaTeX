@@ -78,6 +78,10 @@ class QQuad(BaseLaTeXClass):
     def dumps(self):
         return r"\qquad"
 
+class ClearPage(BaseLaTeXClass):
+    def dumps(self):
+        return r"\clearpage"
+
 
 class Figure(Float):
 
