@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+u"""
     pylatex.section
     ~~~~~~~
 
@@ -15,39 +15,49 @@ from .base_classes import BaseLaTeXContainer
 
 class SectionBase(BaseLaTeXContainer):
 
-    """A class that is the base for all section type classes"""
+    u"""A class that is the base for all section type classes"""
 
     def __init__(self, title, numbering=True, data=None):
         self.title = title
         self.numbering = numbering
 
-        super(SectionBase,self).__init__(data)
+        super(SectionBase, self).__init__(data)
 
     def dumps(self):
-        """Represents the section as a string in LaTeX syntax."""
+        u"""Represents the section as a string in LaTeX syntax."""
 
         if not self.numbering:
-            num = '*'
+            num = u'*'
         else:
-            num = ''
+            num = u''
 
-        base = '\\' + self.__class__.__name__.lower() + num
-        string = base + '{' + self.title + '}\n' + dumps_list(self)
+        base = u'\\' + self.__class__.__name__.lower() + num
+        string = base + u'{' + self.title + u'}\n' + dumps_list(self)
 
-        super(SectionBase,self).dumps()
+        super(SectionBase, self).dumps()
         return string
 
 
 class Section(SectionBase):
 
-    """A class that represents a section."""
+    u"""A class that represents a section."""
+
+    def __init__(self, title, numbering=True, data=None):
+        super(Section, self).__init__(title, numbering, data)
 
 
 class Subsection(SectionBase):
 
-    """A class that represents a subsection."""
+    u"""A class that represents a subsection."""
+
+    def __init__(self, title, numbering=True, data=None):
+        super(Subsection, self).__init__(title, numbering, data)
+
 
 
 class Subsubsection(SectionBase):
 
-    """A class that represents a subsubsection."""
+    u"""A class that represents a subsubsection."""
+
+    def __init__(self, title, numbering=True, data=None):
+        super(Subsubsection, self).__init__(title, numbering, data)

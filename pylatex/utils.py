@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+u"""
     pylatex.utils
     ~~~~~~~
 
@@ -11,55 +11,55 @@
 """
 
 _latex_special_chars = {
-    '&':  r'\&',
-    '%':  r'\%',
-    '$':  r'\$',
-    '#':  r'\#',
-    '_':  r'\_',
-    '{':  r'\{',
-    '}':  r'\}',
-    '~':  r'\lettertilde{}',
-    '^':  r'\letterhat{}',
-    '\\': r'\letterbackslash{}',
-    '\n': r'\\\\',
+    u'&':  ur'\&',
+    u'%':  ur'\%',
+    u'$':  ur'\$',
+    u'#':  ur'\#',
+    u'_':  ur'\_',
+    u'{':  ur'\{',
+    u'}':  ur'\}',
+    u'~':  ur'\lettertilde{}',
+    u'^':  ur'\letterhat{}',
+    u'\\': ur'\letterbackslash{}',
+    u'\n': ur'\\\\',
 }
 
 
 def escape_latex(s):
-    """Escape characters that are special in latex.
+    u"""Escape characters that are special in latex.
 
     Sources:
         * http://tex.stackexchange.com/a/34586/43228
         * http://stackoverflow.com/a/16264094/2570866
     """
-    return ''.join(_latex_special_chars.get(c, c) for c in s)
+    return u''.join(_latex_special_chars.get(c, c) for c in s)
 
 
-def dumps_list(l, escape=False, token='\n'):
-    """Dumps a list that can contain anything"""
+def dumps_list(l, escape=False, token=u'\n'):
+    u"""Dumps a list that can contain anything"""
     return token.join(_latex_item_to_string(i, escape) for i in l)
 
 
 def _latex_item_to_string(i, escape=False):
-    """Use the render method when possible, otherwise use str."""
-    if hasattr(i, 'dumps'):
+    u"""Use the render method when possible, otherwise use str."""
+    if hasattr(i, u'dumps'):
         return i.dumps()
     elif escape:
-        return str(escape_latex(i))
-    return str(i)
+        return unicode(escape_latex(i))
+    return unicode(i)
 
 
 def bold(s):
-    """Returns the string bold.
+    u"""Returns the string bold.
 
     Source: http://stackoverflow.com/a/16264094/2570866
     """
-    return r'\textbf{' + s + '}'
+    return ur'\textbf{' + s + u'}'
 
 
 def italic(s):
-    """Returns the string italicized.
+    u"""Returns the string italicized.
 
     Source: http://stackoverflow.com/a/16264094/2570866
     """
-    return r'\textit{' + s + '}'
+    return ur'\textit{' + s + u'}'

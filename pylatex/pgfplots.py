@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
+u"""
     pylatex.pgfplots
     ~~~~~~~~~~~~~~~~
 
@@ -16,27 +16,27 @@ from pylatex.package import Package
 
 class TikZ(BaseLaTeXNamedContainer):
 
-    """Basic TikZ container class."""
+    u"""Basic TikZ container class."""
 
     def __init__(self, data=None):
-        packages = [Package('tikz')]
-        super(TikZ,self).__init__('tikzpicture', data=data, packages=packages)
+        packages = [Package(u'tikz')]
+        super(TikZ, self).__init__(u'tikzpicture', data=data, packages=packages)
 
 
 class Axis(BaseLaTeXNamedContainer):
 
-    """PGFPlots axis container class, this contains plots."""
+    u"""PGFPlots axis container class, this contains plots."""
 
     def __init__(self, data=None, options=None):
-        packages = [Package('pgfplots'), Package('compat=newest',
-                                                 base='pgfplotsset')]
+        packages = [Package(u'pgfplots'), Package(u'compat=newest',
+                                                 base=u'pgfplotsset')]
 
-        super(Axis,self).__init__('axis', data=data, options=options, packages=packages)
+        super(Axis, self).__init__(u'axis', data=data, options=options, packages=packages)
 
 
 class Plot(BaseLaTeXClass):
 
-    """PGFPlot normal plot."""
+    u"""PGFPlot normal plot."""
 
     def __init__(self, name=None, func=None, coordinates=None, options=None):
         self.name = name
@@ -44,31 +44,31 @@ class Plot(BaseLaTeXClass):
         self.coordinates = coordinates
         self.options = options
 
-        packages = [Package('pgfplots'), Package('compat=newest',
-                                                 base='pgfplotsset')]
+        packages = [Package(u'pgfplots'), Package(u'compat=newest',
+                                                 base=u'pgfplotsset')]
 
-        super(Plot,self).__init__(packages=packages)
+        super(Plot, self).__init__(packages=packages)
 
     def dumps(self):
-        """Represents the plot as a string in LaTeX syntax."""
-        string = r'\addplot'
+        u"""Represents the plot as a string in LaTeX syntax."""
+        string = ur'\addplot'
 
         if self.options is not None:
-            string += '[' + self.options + ']'
+            string += u'[' + self.options + u']'
 
         if self.coordinates is not None:
-            string += ' coordinates {\n'
+            string += u' coordinates {\n'
 
             for c in self.coordinates:
-                string += '(' + str(c[0]) + ',' + str(c[1]) + ')\n'
-            string += '};\n\n'
+                string += u'(' + unicode(c[0]) + u',' + unicode(c[1]) + u')\n'
+            string += u'};\n\n'
 
         elif self.func is not None:
-            string += '{' + self.func + '};\n\n'
+            string += u'{' + self.func + u'};\n\n'
 
         if self.name is not None:
-            string += r'\addlegendentry{' + self.name + '}\n'
+            string += ur'\addlegendentry{' + self.name + u'}\n'
 
-        super(Plot,self).dumps()
+        super(Plot, self).dumps()
 
         return string
